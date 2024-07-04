@@ -1,0 +1,27 @@
+version: "3"
+services:
+  cosmo_mongo:
+    container_name: cosmo_mongo
+    image: mongo
+    environment:
+      - INITIATE_OFF=true
+    restart: unless-stopped
+    networks:
+      - cosmonet
+  cosmo_mongo_express: # this service is a MongoDB UI, and is optional
+    image: mongo-express
+    container_name: cosmo_mongo_express
+    ports:
+      - "8088:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: cosmo_mongo
+      ME_CONFIG_OPTIONS_EDITORTHEME: "ambiance"
+    restart: unless-stopped
+    depends_on:
+      - cosmo_mongo
+    links:
+      - cosmo_mongo
+    networks:
+      - cosmonet
+networks:
+  cosmonet:
